@@ -5,7 +5,6 @@ const addBioData = async (req, res) => {
     const { name, dob, pob, education, work, contactNo, email, address } =
       req.body;
 
-    // Create new bioData entry
     const newBioData = new bioDataDetails({
       name,
       dob,
@@ -17,7 +16,6 @@ const addBioData = async (req, res) => {
       address,
     });
 
-    // Save to database
     await newBioData.save();
 
     return res.status(201).json({

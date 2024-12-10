@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const connectDB = async () => {
-  mongoose.connection.on("connected", () => {
-    console.log("DB CONNECTED");
-  });
-  await mongoose.connect(`${process.env.MONGODB_URI}/marriage-biodata`);
+  try {
+    mongoose.connection.on("connected", () => {
+      console.log("Db connected");
+    });
+    await mongoose.connect(`${process.env.MONGODB_URI}/marriage-biodata`);
+  } catch (error) {
+    console.log("error in mongoose", error);
+  }
 };
 
 export default connectDB;
