@@ -2,31 +2,34 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const authenticateAdmin = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const token = req.headers.authorization;
     if (!token) {
       return res
         .status(401)
-        .json({ success: false, message: "Access denied. No token provided." });
+        .json({ success: false, message: "Token required" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res
+          .status(403)
+          .json({ success: false, message: "Invalid token" });
+      }
 
-    if (decoded.role !== "admin") {
-      return res
-        .status(403)
-        .json({ success: false, message: "Access denied. Admin only." });
-    }
-
-    req.admin = decoded;
-    next();
+      req.user = decoded;
+      if (req.user.role !== "admin") {
+        return res
+          .status(403)
+          .json({ success: false, message: "Access denied!! Only admin" });
+      }
+      next();
+    });
   } catch (error) {
-    console.error(error);
-    res
-      .status(401)
-      .json({ success: false, message: "Invalid or expired token." });
+    console.error("Authentication error:", error.message);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
-export { authenticateAdmin };
+export { authenticateToken };

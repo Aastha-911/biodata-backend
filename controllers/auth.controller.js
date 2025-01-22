@@ -23,4 +23,18 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { loginUser };
+const authenticated = async (req, res) => {
+  try {
+    const userId = req.user;
+    if (!userId) {
+      return res
+        .status(200)
+        .json({ message: "user not found ", success: false });
+    }
+    return res.status(200).json({ message: "user verified ", success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message, success: false });
+  }
+};
+
+export { loginUser, authenticated };
