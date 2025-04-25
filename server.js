@@ -21,14 +21,17 @@ connectDB();
 
 // Enable CORS globally
 app.use(cors({
-    origin: ["http://localhost:5173", "https://wwww.marriagebiodataonline.com"],
+    origin: ["http://localhost:5173", "https://www.marriagebiodataonline.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
 }));
 
-// Add headers for static file requests
 app.use("/uploads", (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*"); // or replace with specific origin
+    const allowedOrigins = ["http://localhost:5173", "https://www.marriagebiodataonline.com"];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
     res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
     next();
 }, express.static(path.join(__dirname, "uploads")));
