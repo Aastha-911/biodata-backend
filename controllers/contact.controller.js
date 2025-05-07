@@ -15,7 +15,7 @@ const createContact = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Contact message submitted successfully",
+      message: "Thank you for your message. We will get back to you soon.",
     });
   } catch (error) {
     console.error(error);
@@ -26,7 +26,7 @@ const createContact = async (req, res) => {
 const getAllContacts = async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
-    res.status(200).json({ success: true, contacts });
+    res.status(200).json({ success: true, contacts, message: "All messages fetched successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: error.message });

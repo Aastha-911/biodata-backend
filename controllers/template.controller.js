@@ -43,6 +43,7 @@ export const getAllTemplates = async (req, res) => {
     res.status(200).json({
       success: true,
       data: templates,
+      message: "Templates fetched successfully."
     });
   } catch (error) {
     res.status(500).json({
