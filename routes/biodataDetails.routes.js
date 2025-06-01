@@ -1,7 +1,8 @@
 import express from "express";
-import { addBioData } from "../controllers/biodataDetails.controller.js";
+import { addBioData, getBioDataUsers } from "../controllers/biodataDetails.controller.js";
 
 const router = express.Router();
 router.post("/add", addBioData);
+router.get("/get", getBioDataUsers);
 
 export default router;

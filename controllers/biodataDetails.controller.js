@@ -20,7 +20,7 @@ const addBioData = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "BioData added successfully!",
+      message: "Biodata created successfully.",
       data: newBioData,
     });
   } catch (error) {
@@ -31,5 +31,20 @@ const addBioData = async (req, res) => {
     });
   }
 };
-
-export { addBioData };
+const getBioDataUsers = async (req, res) => {
+  try {
+    const bioDataUsers = await bioDataDetails.find();
+    return res.status(200).json({
+      success: true,
+      message: "BioData users fetched successfully!",
+      data: bioDataUsers,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch BioData users",
+      error: error.message,
+    });
+  }
+};
+export { addBioData, getBioDataUsers };

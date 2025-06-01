@@ -21,13 +21,13 @@ connectDB();
 
 // Enable CORS globally
 app.use(cors({
-    origin: ["http://localhost:5173", "https://www.marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"],
+    origin: ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
 }));
 
 app.use("/uploads", (req, res, next) => {
-    const allowedOrigins = ["http://localhost:5173", "https://www.marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"];
+    const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.setHeader("Access-Control-Allow-Origin", origin);
