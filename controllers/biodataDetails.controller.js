@@ -2,8 +2,15 @@ import bioDataDetails from "../models/biodataDetails.model.js";
 
 const addBioData = async (req, res) => {
   try {
-    const { name, dob, pob, education, work, contactNo, email, address } =
-      req.body;
+    const { name, dob, pob, education, work, contactNo, email, address } = req.body;
+    console.log(req.body)
+    const photoUrl = req.file?.path;
+    if (!photoUrl) {
+      return res.status(400).json({
+        success: false,
+        message: "Photo is required",
+      });
+    }
 
     const newBioData = new bioDataDetails({
       name,
@@ -14,6 +21,7 @@ const addBioData = async (req, res) => {
       contactNo,
       email,
       address,
+      photo: photoUrl,
     });
 
     await newBioData.save();
@@ -24,13 +32,16 @@ const addBioData = async (req, res) => {
       data: newBioData,
     });
   } catch (error) {
+    console.dir(error, { depth: null }); // ✅ Full error in logs
+
     return res.status(500).json({
       success: false,
       message: "Failed to add BioData",
-      error: error.message,
+      error: error?.message || JSON.stringify(error), // ✅ Will never be [object Object]
     });
   }
 };
+
 const getBioDataUsers = async (req, res) => {
   try {
     const bioDataUsers = await bioDataDetails.find();
@@ -40,11 +51,14 @@ const getBioDataUsers = async (req, res) => {
       data: bioDataUsers,
     });
   } catch (error) {
+    console.dir(error, { depth: null });
+
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch BioData users",
-      error: error.message,
+      message: "Failed to add BioData",
+      error: error?.message || JSON.stringify(error),
     });
   }
 };
+
 export { addBioData, getBioDataUsers };

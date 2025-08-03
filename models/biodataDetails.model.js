@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import templateSchema from "./template.model.js";
 const bioDataDetailsSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -10,6 +10,10 @@ const bioDataDetailsSchema = new mongoose.Schema(
     contactNo: { type: String, required: true, trim: true },
     email: { type: String, trim: true },
     address: { type: String, required: true, trim: true },
+    photo: { type: Array, trim: true },
+    template: {
+      type: mongoose.Schema.Types.ObjectId,
+    },
   },
   {
     timestamps: true,
