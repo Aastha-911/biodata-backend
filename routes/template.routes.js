@@ -1,5 +1,4 @@
 import express from "express";
-import { upload } from "../middleware/multer.js";
 import {
   addTemplate,
   getAllTemplates,
@@ -7,13 +6,17 @@ import {
   updateTemplate,
   deleteTemplate,
 } from "../controllers/template.controller.js";
+import templateUpload from "../middleware/templateUpload.js";
 
 const router = express.Router();
 
-const uploadFields = upload.fields([
+// Cloudinary upload for preview + background images
+const uploadFields = templateUpload.fields([
   { name: "previewImage", maxCount: 1 },
   { name: "bgImage", maxCount: 1 },
 ]);
+
+// Routes
 router.post("/add", uploadFields, addTemplate);
 router.get("/", getAllTemplates);
 router.get("/:id", getTemplateById);

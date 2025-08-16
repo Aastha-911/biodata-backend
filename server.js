@@ -7,7 +7,7 @@ import userRoutes from "./routes/auth.routes.js";
 import bioDataRoutes from "./routes/biodataDetails.routes.js";
 import templateRoutes from "./routes/template.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
-import { cloudinaryConfig } from "./utils/cloudinary.js"
+import { cloudinary } from "./utils/cloudinary.js"
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -18,7 +18,7 @@ const app = express();
 
 // Connect to DB
 connectDB();
-cloudinaryConfig;
+cloudinary;
 
 // Enable CORS globally
 app.use(cors({
