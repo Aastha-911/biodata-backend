@@ -53,5 +53,39 @@ const getBioDataUsers = async (req, res) => {
     });
   }
 };
+// Delete biodata by ID
+const deleteBioDataById = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-export { addBioData, getBioDataUsers };
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid biodata ID",
+      });
+    }
+
+    const deletedBioData = await bioDataDetails.findByIdAndDelete(id);
+
+    if (!deletedBioData) {
+      return res.status(404).json({
+        success: false,
+        message: "Biodata not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Biodata deleted successfully",
+      data: deletedBioData,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete biodata",
+      error: error?.message || JSON.stringify(error),
+    });
+  }
+};
+export { addBioData, getBioDataUsers, deleteBioDataById };

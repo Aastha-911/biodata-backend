@@ -7,6 +7,7 @@ import userRoutes from "./routes/auth.routes.js";
 import bioDataRoutes from "./routes/biodataDetails.routes.js";
 import templateRoutes from "./routes/template.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
+import orderRoutes from "./routes/order.route.js";
 import { cloudinary } from "./utils/cloudinary.js"
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -46,6 +47,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/biodata", bioDataRoutes);
 app.use("/api/templates", templateRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/order", orderRoutes);
 
 // Server start
 const PORT = process.env.PORT || 6000;
