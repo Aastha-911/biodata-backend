@@ -21,25 +21,36 @@ const app = express();
 connectDB();
 cloudinary;
 
-// Enable CORS globally
+// Allowed origins
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://www.marriagebiodataonline.com",
+    "https://marriagebiodataonline.com",
+    "https://admin.marriagebiodataonline.com",
+    "http://192.168.0.102:3000"
+];
+
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://marriagebiodataonline.com", "https://admin.marriagebiodataonline.com", "http://192.168.0.102:3000"],
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS not allowed for this origin: " + origin));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
 }));
 
-app.use("/uploads", (req, res, next) => {
-    const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"];
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    }
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    next();
-}, express.static(path.join(__dirname, "uploads")));
+// Explicit OPTIONS handling (important for some browsers)
+app.options("*", cors());
 
 // Middleware
 app.use(express.json({ limit: "50mb" }));
+
+// Static files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.get("/", (req, res) => res.send("API is working"));
