@@ -23,13 +23,13 @@ cloudinary;
 
 // Enable CORS globally
 app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://admin.marriagebiodataonline.com", "http://192.168.0.102:3000"],
+    origin: ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://marriagebiodataonline.com", "https://admin.marriagebiodataonline.com", "http://192.168.0.102:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
 }));
 
 app.use("/uploads", (req, res, next) => {
-    const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"];
+    const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", "https://www.marriagebiodataonline.com", "https://marriagebiodataonline.com", "https://admin.marriagebiodataonline.com"];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
         res.setHeader("Access-Control-Allow-Origin", origin);

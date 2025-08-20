@@ -7,14 +7,14 @@ import {
     deleteOrderById,
     updateOrderStatus
 } from "../controllers/orderController.js";
-
+import { authenticateToken } from "../middleware/auth.js";
 const router = express.Router();
 
 router.post("/create-order", createOrder);
 router.post("/verify-order", verifyOrder);
-router.post("/get-all-orders", getAllOrders);
-router.post("/get-order-details", getOrderDetails);
-router.post("/delete", deleteOrderById);
-router.post("/update-status", updateOrderStatus);
+router.get("/get-all-orders", authenticateToken, getAllOrders);
+router.post("/get-order-details", authenticateToken, getOrderDetails);
+router.post("/delete", authenticateToken, deleteOrderById);
+router.post("/update-status", authenticateToken, updateOrderStatus);
 
 export default router;
