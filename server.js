@@ -8,7 +8,7 @@ import bioDataRoutes from "./routes/biodataDetails.routes.js";
 import templateRoutes from "./routes/template.routes.js";
 import contactRoutes from "./routes/contact.routes.js";
 import orderRoutes from "./routes/order.route.js";
-import { cloudinary } from "./utils/cloudinary.js"
+import { cloudinary } from "./utils/cloudinary.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -21,29 +21,10 @@ const app = express();
 connectDB();
 cloudinary;
 
-// Allowed origins
-const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:3000",
-    "https://www.marriagebiodataonline.com",
-    "https://marriagebiodataonline.com",
-    "https://admin.marriagebiodataonline.com",
-    "http://192.168.0.102:3000"
-];
+// ✅ Enable CORS for all origins
+app.use(cors());
 
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("CORS not allowed for this origin: " + origin));
-        }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true
-}));
-
-// Explicit OPTIONS handling (important for some browsers)
+// Handle preflight for all routes
 app.options("*", cors());
 
 // Middleware
@@ -62,4 +43,4 @@ app.use("/api/order", orderRoutes);
 
 // Server start
 const PORT = process.env.PORT || 6000;
-app.listen(PORT, () => console.log("Server is started on PORT " + PORT));
+app.listen(PORT, () => console.log("🚀 Server started on PORT " + PORT));
