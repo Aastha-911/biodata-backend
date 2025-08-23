@@ -21,11 +21,30 @@ const app = express();
 connectDB();
 cloudinary;
 
-// ✅ Enable CORS for all origins
-app.use(cors());
+// ✅ Use cors package
+const allowedOrigins = [
+    "https://www.marriagebiodataonline.com",
+    "https://marriagebiodataonline.com",
+    "https://admin.marriagebiodataonline.com",
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+];
 
-// Handle preflight for all routes
-app.options("*", cors());
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        credentials: true, // ✅ if you need cookies/auth headers
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    })
+);
 
 // Middleware
 app.use(express.json({ limit: "50mb" }));

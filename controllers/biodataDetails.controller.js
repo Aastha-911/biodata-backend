@@ -24,6 +24,7 @@ const addBioData = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Biodata created successfully.",
+      biodataDetailsId: newBioData._id,
       data: newBioData,
     });
   } catch (error) {

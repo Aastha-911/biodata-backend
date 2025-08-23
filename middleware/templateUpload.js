@@ -6,8 +6,13 @@ import { cloudinary } from "../utils/cloudinary.js";
 const templateStorage = new CloudinaryStorage({
     cloudinary,
     params: async (req, file) => {
-        const templateName =
-            req.query?.name || req.body?.name?.trim().replace(/\s+/g, "_") || "default";
+        let templateName = req.query?.name || req.body?.name || "default";
+
+        // Trim, replace all spaces with dash, remove extra spaces, lowercase
+        templateName = templateName
+            .trim()
+            .replace(/\s+/g, "-")   // replace one or more spaces with dash
+            .toLowerCase();
 
         return {
             folder: `templates/${templateName}`,
@@ -16,7 +21,6 @@ const templateStorage = new CloudinaryStorage({
         };
     },
 });
-
 
 const templateUpload = multer({ storage: templateStorage });
 
