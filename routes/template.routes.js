@@ -5,6 +5,7 @@ import {
   getTemplateById,
   updateTemplate,
   deleteTemplate,
+  getTemplateImages,
 } from "../controllers/template.controller.js";
 import templateUpload from "../middleware/templateUpload.js";
 import { authenticateToken } from "../middleware/auth.js";
@@ -20,6 +21,7 @@ const uploadFields = templateUpload.fields([
 // Routes
 router.post("/add", authenticateToken, uploadFields, addTemplate);
 router.get("/", cloudinaryRewriteMiddleware, getAllTemplates);
+router.get("/images", cloudinaryRewriteMiddleware, getTemplateImages)
 router.get("/:id", cloudinaryRewriteMiddleware, getTemplateById);
 router.put("/:id", authenticateToken, uploadFields, updateTemplate);
 router.delete("/:id", authenticateToken, deleteTemplate);

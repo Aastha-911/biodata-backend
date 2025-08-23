@@ -17,7 +17,7 @@ const templateStorage = new CloudinaryStorage({
         return {
             folder: `templates/${templateName}`,
             allowed_formats: ["jpg", "jpeg", "png", "webp"],
-            public_id: `${Date.now()}-${file.fieldname}`,
+            public_id: `${templateName}-${file.fieldname}`,
         };
     },
 });

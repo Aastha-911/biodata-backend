@@ -176,4 +176,35 @@ export const deleteTemplate = async (req, res) => {
     res.status(500).json({ message: "Error deleting template", error });
   }
 };
+// GET /api/templates/images
+export const getTemplateImages = async (req, res) => {
+  try {
+    // Fetch previewImage, bgImage, name, createdAt, updatedAt
+    const templates = await Template.find({}, "previewImage bgImage name createdAt updatedAt");
+
+    const images = templates.map(t => ({
+      previewImage: t.previewImage,
+      bgImage: t.bgImage,
+      name: t.name,           // Include the template name
+      createdAt: t.createdAt,
+      updatedAt: t.updatedAt,
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: images,
+      message: "Template images fetched successfully."
+    });
+  } catch (error) {
+    console.error("Error fetching template images:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch template images",
+      error: error.message,
+    });
+  }
+};
+
+
+
 
