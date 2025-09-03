@@ -1,15 +1,14 @@
 import Template from "../models/template.model.js";
 import { cloudinary } from "../utils/cloudinary.js";
+
 export const addTemplate = async (req, res) => {
   try {
     let { tag, name, type, price } = req.body;
-    // Ensure tag is always an array
+
     if (typeof tag === "string") {
       try {
-        // Try parsing JSON string
         tag = JSON.parse(tag);
       } catch {
-        // Fallback: split by comma
         tag = tag.split(",").map((t) => t.trim());
       }
     }
@@ -57,11 +56,22 @@ export const addTemplate = async (req, res) => {
 
 export const getAllTemplates = async (req, res) => {
   try {
-    const templates = await Template.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const skip = (page - 1) * limit;
+    const templates = await Template.find().skip(skip).limit(limit);
+    const total = await Template.countDocuments();
     res.status(200).json({
       success: true,
       data: templates,
-      message: "Templates fetched successfully."
+      message: "Templates fetched successfully.",
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -100,7 +110,6 @@ export const updateTemplate = async (req, res) => {
     const { id } = req.params;
     let { tag, name, type, price } = req.body;
 
-    // Ensure tag is always an array if provided
     if (tag) {
       if (typeof tag === "string") {
         try {
@@ -111,7 +120,8 @@ export const updateTemplate = async (req, res) => {
       }
     }
 
-    const previewImage = req.files?.previewImage?.[0]?.path || req.body.previewImage;
+    const previewImage =
+      req.files?.previewImage?.[0]?.path || req.body.previewImage;
     const bgImage = req.files?.bgImage?.[0]?.path || req.body.bgImage;
 
     const updatedTemplate = await Template.findByIdAndUpdate(
@@ -170,22 +180,26 @@ export const deleteTemplate = async (req, res) => {
     // Finally delete template from DB
     await template.deleteOne();
 
-    res.status(200).json({ message: "Template and images deleted successfully" });
+    res
+      .status(200)
+      .json({ message: "Template and images deleted successfully" });
   } catch (error) {
     console.error("Error deleting template:", error);
     res.status(500).json({ message: "Error deleting template", error });
   }
 };
-// GET /api/templates/images
+
 export const getTemplateImages = async (req, res) => {
   try {
-    // Fetch previewImage, bgImage, name, createdAt, updatedAt
-    const templates = await Template.find({}, "previewImage bgImage name createdAt updatedAt");
+    const templates = await Template.find(
+      {},
+      "previewImage bgImage name createdAt updatedAt"
+    );
 
-    const images = templates.map(t => ({
+    const images = templates.map((t) => ({
       previewImage: t.previewImage,
       bgImage: t.bgImage,
-      name: t.name,           // Include the template name
+      name: t.name, // Include the template name
       createdAt: t.createdAt,
       updatedAt: t.updatedAt,
     }));
@@ -193,7 +207,7 @@ export const getTemplateImages = async (req, res) => {
     res.status(200).json({
       success: true,
       data: images,
-      message: "Template images fetched successfully."
+      message: "Template images fetched successfully.",
     });
   } catch (error) {
     console.error("Error fetching template images:", error);
@@ -204,7 +218,3 @@ export const getTemplateImages = async (req, res) => {
     });
   }
 };
-
-
-
-

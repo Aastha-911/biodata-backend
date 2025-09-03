@@ -1,11 +1,11 @@
 import express from "express";
 import {
-    createOrder,
-    verifyOrder,
-    getAllOrders,
-    getOrderDetails,
-    deleteOrderById,
-    updateOrderStatus
+  createOrder,
+  verifyOrder,
+  getAllOrders,
+  getOrderDetails,
+  deleteOrderById,
+  updateOrderStatus,
 } from "../controllers/orderController.js";
 import { authenticateToken } from "../middleware/auth.js";
 const router = express.Router();

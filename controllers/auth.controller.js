@@ -15,7 +15,13 @@ const loginUser = async (req, res) => {
       password === process.env.ADMIN_PASSWORD
     ) {
       const token = createToken("admin", email);
-      return res.json({ success: true, token, role: "admin", name: process.env.ADMIN_Name, message: "Logged in successfully." });
+      return res.json({
+        success: true,
+        token,
+        role: "admin",
+        name: process.env.ADMIN_Name,
+        message: "Logged in successfully.",
+      });
     }
     return res.json({ success: false, message: "Invalid admin credentials" });
   } catch (error) {
@@ -28,9 +34,7 @@ const authenticated = async (req, res) => {
   try {
     const userId = req.user;
     if (!userId) {
-      return res
-        .status(200)
-        .json({ message: "Invalid User", success: false });
+      return res.status(200).json({ message: "Invalid User", success: false });
     }
     return res.status(200).json({ message: "user verified ", success: true });
   } catch (error) {

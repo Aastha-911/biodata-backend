@@ -21,7 +21,7 @@ const uploadFields = templateUpload.fields([
 // Routes
 router.post("/add", authenticateToken, uploadFields, addTemplate);
 router.get("/", cloudinaryRewriteMiddleware, getAllTemplates);
-router.get("/images", cloudinaryRewriteMiddleware, getTemplateImages)
+router.get("/images", cloudinaryRewriteMiddleware, getTemplateImages);
 router.get("/:id", cloudinaryRewriteMiddleware, getTemplateById);
 router.put("/:id", authenticateToken, uploadFields, updateTemplate);
 router.delete("/:id", authenticateToken, deleteTemplate);

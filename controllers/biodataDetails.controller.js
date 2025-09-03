@@ -1,9 +1,20 @@
 import bioDataDetails from "../models/biodataDetails.model.js";
 import mongoose from "mongoose";
+
 const addBioData = async (req, res) => {
   try {
-    const { name, dob, pob, education, work, contactNo, email, address, template } = req.body;
-    console.log(req.body)
+    const {
+      name,
+      dob,
+      pob,
+      education,
+      work,
+      contactNo,
+      email,
+      address,
+      template,
+    } = req.body;
+    console.log(req.body);
     const photoUrl = req.file?.path;
 
     const newBioData = new bioDataDetails({
@@ -34,27 +45,44 @@ const addBioData = async (req, res) => {
 
 const getBioDataUsers = async (req, res) => {
   try {
-    const bioDataUsers = await bioDataDetails.find().populate({
-      path: "template",
-      select: "name price -_id"
-    });
-    ;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const skip = (page - 1) * limit;
+
+    const bioDataUsers = await bioDataDetails
+      .find()
+      .populate({
+        path: "template",
+        select: "name price -_id",
+      })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await bioDataDetails.countDocuments();
+
     return res.status(200).json({
       success: true,
       message: "BioData users fetched successfully!",
       data: bioDataUsers,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.dir(error, { depth: null });
 
     return res.status(500).json({
       success: false,
-      message: "Failed to add BioData",
+      message: "Failed to fetch BioData users",
       error: error?.message || JSON.stringify(error),
     });
   }
 };
-// Delete biodata by ID
+
 const deleteBioDataById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -89,4 +117,5 @@ const deleteBioDataById = async (req, res) => {
     });
   }
 };
+
 export { addBioData, getBioDataUsers, deleteBioDataById };
